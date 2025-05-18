@@ -17,8 +17,10 @@ import (
 #Node: {
 	name:          =~"^[a-z0-9][a-z0-9\\-]{0,61}[a-z0-9]$|^[a-z0-9]$" & !="global" & !="controller" & !="worker"
 	address:       net.IPv4
+	setup_address: net.IPv4
 	controller:    bool
 	disk:          string
+	extra_disk?:   *"sata" | "iscsi"
 	mac_addr:      =~"^([0-9a-f]{2}[:]){5}([0-9a-f]{2})$"
 	schematic_id:  =~"^[a-z0-9]{64}$"
 	mtu?:          >=1450 & <=9000

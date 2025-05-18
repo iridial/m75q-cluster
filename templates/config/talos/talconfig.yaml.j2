@@ -24,7 +24,7 @@ cniConfig:
 nodes:
   #% for item in nodes %#
   - hostname: "#{ item.name }#"
-    ipAddress: "#{ item.address }#"
+    ipAddress: "#{ item.address }##% if item.setup_address %#,#{ item.setup_address }##% endif %#"
     #% if item.disk.startswith('/') %#
     installDisk: "#{ item.disk }#"
     #% else %#
@@ -66,6 +66,15 @@ nodes:
         #% endif %#
     #% if talos_patches('%s' % (item.name)) | length == 0 %#
     #% if item.encrypt_disk | default(false, true) %#
+    #% if item.extra_disk %#
+    userVolumes:
+      - name: "#{ item.name }#-data"
+        provisioning:
+          diskSelector:
+            match: disk.transport == "#{ item.extra_disk }#" && !system_disk
+        filesystem:
+          type: xfs
+    #% endif %#
     patches:
       - # Encrypt system disk with TPM
         |-
@@ -119,6 +128,15 @@ patches:
 #% if loop.index == 1 %#
 # Controller patches
 controlPlane:
+  #% if cluster_extra_kernel_args is defined and cluster_extra_kernel_args|length %#
+  # https://budimanjojo.github.io/talhelper/latest/guides/#adding-talos-extensions-and-kernel-arguments
+  schematic:
+    customization:
+      extraKernelArgs:
+        #% for item in cluster_extra_kernel_args %#
+        - #{ item }#
+        #% endfor %#
+  #% endif %#
   patches:
 #% endif %#
     - "@./patches/controller/#{ file | basename }#"

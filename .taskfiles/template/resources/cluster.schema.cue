@@ -2,6 +2,7 @@ package config
 
 import (
 	"net"
+	"list"
 )
 
 #Config: {
@@ -26,6 +27,7 @@ import (
 	cilium_bgp_router_asn?: string & !=""
 	cilium_bgp_node_asn?: string & !=""
 	cilium_loadbalancer_mode?: *"dsr" | "snat"
+	cluster_extra_kernel_args?: list.UniqueItems() & [...string]
 }
 
 #Config

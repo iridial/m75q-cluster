@@ -1,0 +1,124 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+---
+clusterName: kubernetes
+
+talosVersion: "${talosVersion}"
+kubernetesVersion: "${kubernetesVersion}"
+
+endpoint: https://10.0.20.80:6443
+additionalApiServerCertSans: &sans
+  - "127.0.0.1"
+  - "10.0.20.80"
+  - "m75q-cluster"
+  - "midgard-cluster"
+additionalMachineCertSans: *sans
+
+clusterPodNets: ["10.42.0.0/16"]
+clusterSvcNets: ["10.43.0.0/16"]
+
+# Disable built-in CNI to use Cilium
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: "m75q-1"
+    ipAddress: "10.0.20.91,10.0.1.31"
+    installDisk: "/dev/nvme0n1"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/4b82055dec8c9571600a4ceeebddbe33b8ca9ec9a9aaefa64853b2bab3b76993
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "00:e0:4c:68:05:be"
+        vlans:
+          - vlanId: 20
+            addresses:
+              - "10.0.20.91/24"
+            mtu: 1500
+            routes:
+              - network: "0.0.0.0/0"
+                gateway: "10.0.20.1"
+            vip:
+              ip: "10.0.20.80"
+  - hostname: "m75q-2"
+    ipAddress: "10.0.20.92,10.0.1.32"
+    installDisk: "/dev/nvme0n1"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/4b82055dec8c9571600a4ceeebddbe33b8ca9ec9a9aaefa64853b2bab3b76993
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "00:e0:4c:68:05:16"
+        vlans:
+          - vlanId: 20
+            addresses:
+              - "10.0.20.92/24"
+            mtu: 1500
+            routes:
+              - network: "0.0.0.0/0"
+                gateway: "10.0.20.1"
+            vip:
+              ip: "10.0.20.80"
+  - hostname: "m75q-3"
+    ipAddress: "10.0.20.93,10.0.1.33"
+    installDisk: "/dev/nvme0n1"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/4b82055dec8c9571600a4ceeebddbe33b8ca9ec9a9aaefa64853b2bab3b76993
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "00:e0:4c:68:05:7a"
+        vlans:
+          - vlanId: 20
+            addresses:
+              - "10.0.20.93/24"
+            mtu: 1500
+            routes:
+              - network: "0.0.0.0/0"
+                gateway: "10.0.20.1"
+            vip:
+              ip: "10.0.20.80"
+  - hostname: "m75q-4"
+    ipAddress: "10.0.20.94,10.0.1.34"
+    installDisk: "/dev/nvme0n1"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/4b82055dec8c9571600a4ceeebddbe33b8ca9ec9a9aaefa64853b2bab3b76993
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "00:e0:4c:68:05:27"
+        vlans:
+          - vlanId: 20
+            addresses:
+              - "10.0.20.94/24"
+            mtu: 1500
+            routes:
+              - network: "0.0.0.0/0"
+                gateway: "10.0.20.1"
+            vip:
+              ip: "10.0.20.80"
+
+# Global patches
+patches:
+  - "@./patches/global/machine-files.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@./patches/global/machine-network.yaml"
+  - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-time.yaml"
+
+# Controller patches
+controlPlane:
+  # https://budimanjojo.github.io/talhelper/latest/guides/#adding-talos-extensions-and-kernel-arguments
+  schematic:
+    customization:
+      extraKernelArgs:
+        - cpufreq.default_governor=powersave
+        - amd_pstate=active
+  patches:
+    - "@./patches/controller/admission-controller-patch.yaml"
+    - "@./patches/controller/cluster.yaml"
+
