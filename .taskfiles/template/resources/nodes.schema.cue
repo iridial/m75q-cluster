@@ -17,7 +17,7 @@ import (
 #Node: {
 	name:          =~"^[a-z0-9][a-z0-9\\-]{0,61}[a-z0-9]$|^[a-z0-9]$" & !="global" & !="controller" & !="worker"
 	address:       net.IPv4
-	setup_address: net.IPv4
+	setup_address?: net.IPv4
 	controller:    bool
 	disk:          string
 	extra_disk?:   *"sata" | "iscsi"

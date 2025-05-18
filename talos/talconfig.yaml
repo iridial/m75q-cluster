@@ -22,7 +22,7 @@ cniConfig:
 
 nodes:
   - hostname: "m75q-1"
-    ipAddress: "10.0.20.91,10.0.1.31"
+    ipAddress: "10.0.20.91"
     installDisk: "/dev/nvme0n1"
     machineSpec:
       secureboot: false
@@ -31,18 +31,17 @@ nodes:
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "00:e0:4c:68:05:be"
-        vlans:
-          - vlanId: 20
-            addresses:
-              - "10.0.20.91/24"
-            mtu: 1500
-            routes:
-              - network: "0.0.0.0/0"
-                gateway: "10.0.20.1"
-            vip:
-              ip: "10.0.20.80"
+        dhcp: false
+        addresses:
+          - "10.0.20.91/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "10.0.20.1"
+        mtu: 1500
+        vip:
+          ip: "10.0.20.80"
   - hostname: "m75q-2"
-    ipAddress: "10.0.20.92,10.0.1.32"
+    ipAddress: "10.0.20.92"
     installDisk: "/dev/nvme0n1"
     machineSpec:
       secureboot: false
@@ -51,18 +50,17 @@ nodes:
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "00:e0:4c:68:05:16"
-        vlans:
-          - vlanId: 20
-            addresses:
-              - "10.0.20.92/24"
-            mtu: 1500
-            routes:
-              - network: "0.0.0.0/0"
-                gateway: "10.0.20.1"
-            vip:
-              ip: "10.0.20.80"
+        dhcp: false
+        addresses:
+          - "10.0.20.92/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "10.0.20.1"
+        mtu: 1500
+        vip:
+          ip: "10.0.20.80"
   - hostname: "m75q-3"
-    ipAddress: "10.0.20.93,10.0.1.33"
+    ipAddress: "10.0.20.93"
     installDisk: "/dev/nvme0n1"
     machineSpec:
       secureboot: false
@@ -71,18 +69,17 @@ nodes:
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "00:e0:4c:68:05:7a"
-        vlans:
-          - vlanId: 20
-            addresses:
-              - "10.0.20.93/24"
-            mtu: 1500
-            routes:
-              - network: "0.0.0.0/0"
-                gateway: "10.0.20.1"
-            vip:
-              ip: "10.0.20.80"
+        dhcp: false
+        addresses:
+          - "10.0.20.93/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "10.0.20.1"
+        mtu: 1500
+        vip:
+          ip: "10.0.20.80"
   - hostname: "m75q-4"
-    ipAddress: "10.0.20.94,10.0.1.34"
+    ipAddress: "10.0.20.94"
     installDisk: "/dev/nvme0n1"
     machineSpec:
       secureboot: false
@@ -91,16 +88,15 @@ nodes:
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "00:e0:4c:68:05:27"
-        vlans:
-          - vlanId: 20
-            addresses:
-              - "10.0.20.94/24"
-            mtu: 1500
-            routes:
-              - network: "0.0.0.0/0"
-                gateway: "10.0.20.1"
-            vip:
-              ip: "10.0.20.80"
+        dhcp: false
+        addresses:
+          - "10.0.20.94/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "10.0.20.1"
+        mtu: 1500
+        vip:
+          ip: "10.0.20.80"
 
 # Global patches
 patches:
